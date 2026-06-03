@@ -2,8 +2,8 @@
 
 An elegant, asynchronous daily standup logger built for the **Konvergenz Network Solutions** Software Engineering Internship Assessment.
 
-**Live Frontend Demo:** [INSERT_YOUR_VERCEL_LINK_HERE]  
-**Live API Endpoint:** [INSERT_YOUR_RENDER_LINK_HERE]
+**Live Frontend Demo:**  https://konvergesync-standup.vercel.app/ 
+**Live API Endpoint:** 
 
 ---
 

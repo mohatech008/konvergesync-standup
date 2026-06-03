@@ -7,7 +7,8 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 CORS(app) 
-BASE_DIR = os.path.abspath(os.path.dirname(__name__))
+
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(BASE_DIR, 'standups.db')}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -41,6 +42,18 @@ class StandupPost(db.Model):
 
 with app.app_context():
     db.create_all()
+
+@app.route('/', methods=['GET'])
+def api_root():
+    return jsonify({
+        "status": "healthy",
+        "message": "KonvergeSync Standup API Backend is running successfully!",
+        "endpoints": {
+            "get_posts": "/standups/ (GET)",
+            "create_post": "/standups/ (POST)",
+            "stats": "/standups/stats/ (GET)"
+        }
+    }), 200
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
