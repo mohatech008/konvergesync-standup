@@ -4,7 +4,7 @@ import Header from './components/Header';
 import StandupForm from './components/StandupForm';
 import Dashboard from './components/Dashboard';
 import Feed from './components/Feed';
-const API_BASE = 'http://127.0.0.1:5000'; 
+const API_BASE = 'https://konvergesync-standup.onrender.com'; 
 
 export default function App() {
   const [posts, setPosts] = useState([]);
@@ -35,7 +35,7 @@ export default function App() {
     <div className="min-h-screen bg-slate-100 text-slate-800 antialiased selection:bg-brand-blue selection:text-white">
       <Header />
       <main className="pt-20 sm:pt-24 pb-12 max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-        {/* LEFT COLUMN: Form and Dashboard */}
+        
         <div className="lg:col-span-5 lg:sticky lg:top-24 space-y-6 lg:space-y-8 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto custom-scrollbar pr-2 pb-4">
           <StandupForm onPostCreated={fetchData} />
           <Dashboard stats={stats} />
