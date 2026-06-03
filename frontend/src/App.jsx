@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Header from './components/Header';
-import StandupForm from './components/StandupForm';
-import Dashboard from './components/Dashboard';
-import Feed from './components/Feed';
+import Header from './Components/Header.jsx';
+import StandupForm from './Components/StandupForm.jsx';
+import Dashboard from './Components/Dashboard.jsx';
+import Feed from './Components/Feed.jsx';
 const API_BASE = 'https://konvergesync-standup.onrender.com'; 
 
 export default function App() {
