@@ -38,7 +38,7 @@ export default function App() {
         
         <div className="lg:col-span-5 lg:sticky lg:top-24 space-y-6 lg:space-y-8 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto custom-scrollbar pr-2 pb-4">
           <StandupForm onPostCreated={fetchData} />
-          <Dashboard stats={stats} />
+         <Dashboard stats={stats} posts={posts} />
         </div>
 
         {/* RIGHT COLUMN: Live Feed */}
