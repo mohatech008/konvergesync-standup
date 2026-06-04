@@ -32,10 +32,21 @@ export default function StandupForm({ onPostCreated }) {
     }
 
     setIsSubmitting(true);
-    
+    let currentTemp = '';
+    let currentCondition = '';
+    try {
+      const weatherRes = await axios.get('https://api.open-meteo.com/v1/forecast?latitude=-1.2833&longitude=36.8167&current_weather=true');
+      currentTemp = weatherRes.data.current_weather.temperature;
+      currentCondition = weatherRes.data.current_weather.weathercode;
+    } catch (err) {
+      console.warn("Failed to fetch weather for this post", err);
+    }
+
     const data = new FormData();
     Object.keys(formData).forEach(key => data.append(key, formData[key]));
     if (file) data.append('file', file);
+    data.append('temperature', currentTemp);
+    data.append('weather_condition', currentCondition);
 
     try {
       await axios.post(`${API_BASE}/standups/`, data, {
@@ -44,9 +55,7 @@ export default function StandupForm({ onPostCreated }) {
       
       setFormData({ author: '', yesterday: '', today: '', blockers: '', has_blocker: false });
       setFile(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ''; 
-      }
+      if (fileInputRef.current) fileInputRef.current.value = ''; 
       
       onPostCreated();
     } catch (err) {

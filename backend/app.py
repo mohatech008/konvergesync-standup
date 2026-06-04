@@ -7,7 +7,6 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 CORS(app) 
-
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(BASE_DIR, 'standups.db')}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -17,7 +16,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 db = SQLAlchemy(app)
-
 class StandupPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     author = db.Column(db.String(100), nullable=False)
@@ -26,6 +24,9 @@ class StandupPost(db.Model):
     blockers = db.Column(db.Text, nullable=True)
     has_blocker = db.Column(db.Boolean, default=False)
     file_attachment = db.Column(db.String(255), nullable=True)
+    temperature = db.Column(db.String(20), nullable=True)
+    weather_condition = db.Column(db.Integer, nullable=True)
+    
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
@@ -37,6 +38,8 @@ class StandupPost(db.Model):
             "blockers": self.blockers,
             "has_blocker": self.has_blocker,
             "file_attachment": self.file_attachment,
+            "temperature": self.temperature,
+            "weather_condition": self.weather_condition,
             "timestamp": self.timestamp.isoformat() + "Z" 
         }
 
@@ -71,6 +74,8 @@ def handle_standups():
         today = request.form.get('today')
         blockers = request.form.get('blockers', '')
         has_blocker = request.form.get('has_blocker') == 'true'
+        temp = request.form.get('temperature')
+        cond = request.form.get('weather_condition')
 
         if not all([author, yesterday, today]):
             return jsonify({"error": "Missing required fields"}), 400
@@ -89,7 +94,9 @@ def handle_standups():
             today=today,
             blockers=blockers,
             has_blocker=has_blocker,
-            file_attachment=file_attachment
+            file_attachment=file_attachment,
+            temperature=temp if temp else None,
+            weather_condition=int(cond) if cond else None
         )
         db.session.add(new_post)
         db.session.commit()
@@ -100,8 +107,6 @@ def handle_standups():
 def get_stats():
     today = datetime.utcnow().date()
     stats = []
-
-    # Get data for the last 7 days
     for i in range(6, -1, -1):
         target_date = today - timedelta(days=i)
         
